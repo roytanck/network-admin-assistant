@@ -4,9 +4,9 @@
 if( !defined('ABSPATH') ){ exit; }
 
 
-if( !class_exists('MPWS_Plugin_stats') ){
+if( !class_exists('MPWS_Plugin_Stats') ){
 
-	class MPWS_Plugin_stats {
+	class MPWS_Plugin_Stats {
 
 		/**
 		 * Constructor.

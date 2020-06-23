@@ -20,12 +20,14 @@ if( !class_exists('Multsite_Plugin_And_Widget_Stats') && is_multisite() ){
 	class Multsite_Plugin_And_Widget_Stats {
 
 		public function init(){
-			if( is_multisite() ){
-				// Load the plugin stats class, and initialize it.
-				require_once( 'includes/plugin_stats.php' );
-				$plugin_stats = new MPWS_Plugin_stats();
-				$plugin_stats->init();
-			}
+			// Load the plugin stats class, and initialize it.
+			require_once( 'includes/plugin_stats.php' );
+			$plugin_stats = new MPWS_Plugin_Stats();
+			$plugin_stats->init();
+			// Load the plugin stats class, and initialize it.
+			require_once( 'includes/widget_stats.php' );
+			$widget_stats = new MPWS_Widget_Stats();
+			$widget_stats->init();
 		}
 
 	}
