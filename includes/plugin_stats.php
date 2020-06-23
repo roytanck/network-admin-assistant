@@ -86,7 +86,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 							$results[$pluginname] = array();
 						}
 						// Add the instance's data to the array.
-						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id ) ) . '">' . __( 'dashboard', 'multisite-plugin-and-widget-stats' ) . ')</a>';
+						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'multisite-plugin-and-widget-stats' ) . ')</a>';
 					}
 				}
 
