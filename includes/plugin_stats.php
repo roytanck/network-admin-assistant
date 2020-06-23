@@ -22,7 +22,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 		 */
 		public function admin_menu() {
 			add_submenu_page(
-				'settings.php',
+				'plugins.php',
 				__( 'Plugin Stats', 'multisite-plugin-and-widget-stats' ),
 				__( 'Plugin Stats', 'multisite-plugin-and-widget-stats' ),
 				'manage_options',
