@@ -14,8 +14,6 @@ if( !class_exists('MPWS_Plugin_stats') ){
 		public function init() {
 			// hook for the admin page
 			add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
-			// hook for the admin js
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_js' ) );
 		}
 
 
@@ -88,7 +86,7 @@ if( !class_exists('MPWS_Plugin_stats') ){
 							$results[$pluginname] = array();
 						}
 						// Add the instance's data to the array.
-						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (' . $site->blog_id . ')' ;
+						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id ) ) . '">' . __( 'dashboard', 'multisite-plugin-and-widget-stats' ) . ')</a>';
 					}
 				}
 
@@ -106,9 +104,6 @@ if( !class_exists('MPWS_Plugin_stats') ){
 			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'multisite-plugin-and-widget-stats' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
 			echo '</em></p>';
 			echo '</div>';
-
-			// Add the inline js.
-			$this->render_inline_js();
 		}
 
 
@@ -148,8 +143,7 @@ if( !class_exists('MPWS_Plugin_stats') ){
 			$html .= '<thead>';
 			$html .= '<tr>';
 			$html .= '<th class="manage-column column-columnname">' . __( 'Plugin name', 'multisite-plugin-and-widget-stats' ) . '</th>';
-			$html .= '<th class="manage-column column-columnname num">' . __( 'Activation count', 'multisite-plugin-and-widget-stats' ) . '</th>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Sites', 'multisite-plugin-and-widget-stats' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Activation count', 'multisite-plugin-and-widget-stats' ) . '</th>';
 			$html .= '</tr>';
 			$html .= '</thead>';
 			$html .= '<tbody>';
@@ -159,47 +153,23 @@ if( !class_exists('MPWS_Plugin_stats') ){
 			foreach( $results as $name=>$inst ){
 				$html .= '<tr' . ( ( $count % 2 == 0 ) ? ' class="alternate"' : '' ) . '>';
 				$html .= '<td class="column-columnname"><strong>' . $name . '</strong></td>';
-				$html .= '<td class="column-columnname num">' . count( $inst ) . '</td>';
-
 				$html .= '<td class="column-columnname">';
-				$html .= '<div class="rt_plugin_stats_details" style="display: none;">';
+				$html .= '<details>';
+				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sites.', 'multisite-plugin-and-widget-stats' ), count( $inst ) ) . '</summary>';
+				$html .= '<ul>';
 				foreach( $inst as $i ){
-					$html .= $i . '<br />';
+					$html .= '<li>' . $i . '</li>';
 				}
-				$html .= '</div>';
-				$html .= '<a class="rt_plugin_stats_toggle_details" href="#">' . __( 'show', 'multisite-plugin-and-widget-stats' ) . '</a>';
+				$html .= '</ul>';
+				$html .= '</details>';
 				$html .= '</td>';
-				
 				$html .= '</tr>';
-
 				$count++;
 			}
 
 			$html .= '</tbody>';
 			$html .= '</table>';
 
-			echo $html;
-		}
-
-
-		/**
-		 * A little bit of inline JS to fold/unfold the site info.
-		 */
-		private function render_inline_js(){
-			$html = '<script type="text/javascript">';
-			$html .= 'jQuery(document).ready(function( $ ) {';
-			$html .= '$(".rt_plugin_stats_toggle_details").click( function( e ){';
-			$html .= 'e.preventDefault();';
-			$html .= '$(this).closest("td").find(".rt_plugin_stats_details").slideToggle(500,function(){';
-			$html .= 'if( $(this).css("display") == "none" ){';
-			$html .= '$(this).closest("td").find(".rt_plugin_stats_toggle_details").html("' . __( 'show', 'multisite-plugin-and-widget-stats' ) . '")';
-			$html .= '} else {';
-			$html .= '$(this).closest("td").find(".rt_plugin_stats_toggle_details").html("' . __( 'hide', 'multisite-plugin-and-widget-stats' ) . '")';
-			$html .= '}';
-			$html .= '});';
-			$html .= '});';
-			$html .= '});';
-			$html .= '</script>';
 			echo $html;
 		}
 
@@ -214,17 +184,6 @@ if( !class_exists('MPWS_Plugin_stats') ){
 			}
 			$r = str_replace( '.php', '', $r );
 			return sanitize_title( $r );
-		}
-
-
-		/**
-		 * Enqueue javascript (just depenencies for now).
-		 */
-		public function enqueue_js( $hook ){
-			if ( 'settings_page_rt_plugin_stats' != $hook ) {
-				return;
-			}
-			wp_enqueue_script( 'jquery' );
 		}
 
 	}
