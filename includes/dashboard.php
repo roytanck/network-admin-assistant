@@ -62,19 +62,56 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
+			// Get the stored data for the widgets section.
+			$widget_stats = get_site_option( 'naa_widget_stats' );
+
+			// Render the widgets section.
 			echo '<section>';
 			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
-			echo '<p class="naa-large">' . 56 . '</p>';
+			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
+			echo '<p>';
+			printf(
+				esc_html__(	'%1$s widgets are current in use on at least one site.', 'network-admin-assistant' ),
+				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
+			);
+			echo '</p>';
 			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			// Assemble data for the users section.
-			$users = get_users( array( 'blog_id' => 0 ) );
+			$users = get_users(
+				array(
+					'blog_id' => 0,
+					'fields'  => 'ID',
+				)
+			);
+			// Initialize some counters.
+			$users_without_role = 0;
+			$network_admin_count = 0;
+			// Loop through the users and coutn network admins and role-less users.
+			foreach( $users as $user_id ){
+				if( is_super_admin( $user_id ) ){
+					$network_admin_count++;
+				} else {
+					$blogs = get_blogs_of_user( $user_id );
+					if( empty( $blogs ) ){
+						$users_without_role++;
+					}
+				}
+			}
 
+			// Render the users section.
 			echo '<section>';
 			echo '<h2>' . __( 'Users', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $users ) ? count( $users ) : '?' ) . '</p>';
+			echo '<p>';
+			printf(
+				esc_html__(	'%1$s users have no role on any site, %2$s network admin(s)', 'network-admin-assistant' ),
+				'<strong>' . $users_without_role . '</strong>',
+				'<strong>' . $network_admin_count . '</strong>',
+			);
+			echo '</p>';
 			echo '<a class="button" href="' . admin_url( 'network/users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
 			echo '</section>';
 

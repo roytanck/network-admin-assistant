@@ -42,6 +42,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 			// create a new array to keep the stats in
 			$results = array();
+			$dashboard_stats = array();
 
 			// get all currently published sites
 			$args = array(
@@ -82,6 +83,9 @@ if( !class_exists('NAA_Widget_Stats') ){
 			// sort the results array alphabetically
 			ksort( $results );
 
+			// Store the number of widgets that are active for use n the dashboard.
+			$dashboard_stats['active'] = count( $results );
+
 			// render the html table
 			$this->render_table( $results );
 			
@@ -91,6 +95,9 @@ if( !class_exists('NAA_Widget_Stats') ){
 			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
 			echo '</em></p>';
 			echo '</div>';
+
+			// Store the dashboard stats.
+			update_site_option( 'naa_widget_stats', $dashboard_stats );
 		}
 
 
