@@ -32,16 +32,27 @@ if( !class_exists('NAA_Widget_Stats') ){
 		}
 
 
-		/**
-		 * Render the options page
-		 */
-		public function settings_page() {
+		public function check_cache_expired() {
+			// Get fresh stats if needed. This will also cache them and refresh the dashboard stats.
+			$stats = $this->gather_stats( false );
+		}
+
+
+		public function gather_stats( $refresh = false ){
+
+			// Before we do any hard work, check if there's a cached version of the stats data.
+			if( ! $refresh ){
+				$cached_stats = get_site_transient( 'naa_widget_data' );
+				if( ! empty( $cached_stats ) ){
+					return $cached_stats;
+				}
+			}
 
 			// start a timer to keep track of processing time
 			$starttime = microtime( true );
 
 			// create a new array to keep the stats in
-			$results = array();
+			$active_widgets = array();
 			$dashboard_stats = array();
 
 			// get all currently published sites
@@ -54,11 +65,6 @@ if( !class_exists('NAA_Widget_Stats') ){
 			);
 			$sites = get_sites( $args );
 
-			// start the page's output
-			echo '<div class="wrap">';
-			echo '<h1>' . __( 'Widget Statistics', 'network-admin-assistant' ) . '</h1>';
-			echo '<p>';
-
 			// gather the data by looping through the sites and getting the sidebars_widgets option
 			foreach( $sites as $site ){
 				
@@ -70,41 +76,71 @@ if( !class_exists('NAA_Widget_Stats') ){
 							// get the widget's id by chopping the end off the instance id
 							$widgetname = $this->get_widget_name( $widget_id );
 							// make sure there's an array for this type of widget
-							if( !isset( $results[ $widgetname ] ) || !is_array( $results[ $widgetname ] ) ){
-								$results[ $widgetname ] = array();
+							if( !isset( $active_widgets[ $widgetname ] ) || !is_array( $active_widgets[ $widgetname ] ) ){
+								$active_widgets[ $widgetname ] = array();
 							}
 							// add the instance's data to the array
-							$results[ $widgetname ][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id , 'widgets.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>' . ' <em>(' . $sidebarname . ')</em>';
+							$active_widgets[ $widgetname ][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id , 'widgets.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>' . ' <em>(' . $sidebarname . ')</em>';
 						}
 					}
 				}
 			}
 
 			// sort the results array alphabetically
-			ksort( $results );
+			ksort( $active_widgets );
 
-			// Store the number of widgets that are active for use n the dashboard.
-			$dashboard_stats['active'] = count( $results );
+			// Store the number of widgets that are active for use on the dashboard.
+			$dashboard_stats['active'] = count( $active_widgets );
+
+			// Store the dashboard stats.
+			update_site_option( 'naa_widget_stats', $dashboard_stats );
+
+			$stats = array(
+				'processing_time' => round( microtime( true ) - $starttime, 3 ),
+				'active_widgets'  => $active_widgets,
+				'site_count'      => count( $sites ),
+				'timestamp'       => current_time( 'timestamp' ),
+			);
+
+			// Store the stats in a transient
+			set_site_transient( 'naa_widget_data', $stats, DAY_IN_SECONDS );
+
+			return $stats;
+		}
+
+
+		/**
+		 * Render the options page
+		 */
+		public function settings_page() {
+
+			$stats = $this->gather_stats( true );
+
+			// start the page's output
+			echo '<div class="wrap">';
+			echo '<h1>' . __( 'Widget Statistics', 'network-admin-assistant' ) . '</h1>';
+			echo '<p>';
 
 			// render the html table
-			$this->render_table( $results );
+			$this->render_table( $stats['active_widgets'] );
 			
 			// wrap up
 			echo '</p>';
 			echo '<p><em>';
-			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
-			echo '</em></p>';
+			printf(
+				__('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ),
+				$stats['processing_time'],
+				$stats['site_count'],
+			);			echo '</em></p>';
 			echo '</div>';
 
-			// Store the dashboard stats.
-			update_site_option( 'naa_widget_stats', $dashboard_stats );
 		}
 
 
 		/**
 		 * Gets passed the results array, renders a nice HTML table
 		 */
-		private function render_table( $results ){
+		private function render_table( $active_widgets ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
 			$html .= '<thead>';
 			$html .= '<tr>';
@@ -116,7 +152,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 			$count = 0;
 
-			foreach( $results as $name=>$inst ){
+			foreach( $active_widgets as $name=>$inst ){
 				$html .= '<tr' . ( ( $count % 2 == 0 ) ? ' class="alternate"' : '' ) . '>';
 				$html .= '<td class="column-columnname"><strong>' . $name . '</strong></td>';
 				$html .= '<td class="column-columnname">';

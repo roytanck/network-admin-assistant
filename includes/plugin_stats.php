@@ -17,6 +17,12 @@ if( !class_exists('NAA_Plugin_Stats') ){
 		}
 
 
+		public function check_cache_expired() {
+			// Get fresh stats if needed. This will also cache them and refresh the dashboard stats.
+			$stats = $this->gather_stats( false );
+		}
+
+
 		/**
 		 * Add a new options page to the network admin.
 		 */
@@ -35,7 +41,15 @@ if( !class_exists('NAA_Plugin_Stats') ){
 		/**
 		 * Gather and store/return the plugin statistics.
 		 */
-		public function gather_stats(){
+		public function gather_stats( $refresh = false ){
+
+			// Before we do any hard work, check if there's a cached version of the stats data.
+			if( ! $refresh ){
+				$cached_stats = get_site_transient( 'naa_plugin_data' );
+				if( ! empty( $cached_stats ) ){
+					return $cached_stats;
+				}
+			}
 
 			// Start a timer to keep track of processing time.
 			$starttime = microtime( true );
@@ -53,7 +67,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			$network_plugins = get_site_option( 'active_sitewide_plugins', null );
 
 			// Remove network activated plugins from our list of installed plugins.
-			foreach( $network_plugins as $key=>$value ){
+			foreach( $network_plugins as $key => $value ){
 				if( array_key_exists( $key, $installed_plugins ) ){
 					unset( $installed_plugins[ $key ] );
 				}
@@ -104,16 +118,18 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			// Store the dashboard stats.
 			update_site_option( 'naa_plugin_stats', $dashboard_stats );
 
-			$processing_time = round( microtime( true ) - $starttime, 3 );
-
 			$stats = array(
-				'processing_time'  => $processing_time,
+				'processing_time'  => round( microtime( true ) - $starttime, 3 ),
 				'network_plugins'  => $network_plugins,
 				'active_plugins'   => $active_plugins,
 				'inactive_plugins' => $installed_plugins,
 				'site_count'       => count( $sites ),
+				'timestamp'        => current_time( 'timestamp' ),
 			);
 
+			// Store the stats in a transient
+			set_site_transient( 'naa_plugin_data', $stats, DAY_IN_SECONDS );
+			
 			return $stats;
 		}
 
@@ -123,39 +139,42 @@ if( !class_exists('NAA_Plugin_Stats') ){
 		 */
 		public function settings_page() {
 
-			$stats = $this->gather_stats();
+			// Get the statistics.
+			$stats = $this->gather_stats( true );
 
 			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Plugin Statistics', 'network-admin-assistant' ) . '</h1>';
+
+			// Network activated plugins.
 			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p>';
-
-			// Render the html table.
 			if( !empty( $stats['network_plugins'] ) ){
 				$this->render_network_activated_table( $stats['network_plugins'] );
 			}
-			
 			echo '</p>';
 
+			// Activated plugins.
 			echo '<h2>' . __( 'Activated plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p>';
-
-			// Render the html table.
 			$this->render_table( $stats['active_plugins'] );
 			echo '</p>';
 
+			// Inactive plugins.
 			echo '<p>';
 			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . '</h2>';
-
 			if( !empty( $stats['inactive_plugins'] ) ){
 				$this->render_network_activated_table( $stats['inactive_plugins'] );
 			} 
-			
-			// Wrap up.
 			echo '</p>';
+
+			// Wrap up.
 			echo '<p><em>';
-			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), $stats['processing_time'], $stats['site_count'] );
+			printf(
+				__('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ),
+				$stats['processing_time'],
+				$stats['site_count'],
+			);
 			echo '</em></p>';
 			echo '</div>';
 		}

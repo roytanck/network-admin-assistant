@@ -19,6 +19,9 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 
 	class Network_Admin_Assistant {
 
+		private $plugin_stats = null;
+		private $widget_stats = null;
+
 		public function init(){
 			if( is_network_admin() ){
 				// Load the plugin's dashboard class, and initialize it.
@@ -27,18 +30,20 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 				$dashboard->init();
 				// Load the plugin stats class, and initialize it.
 				require_once( 'includes/plugin_stats.php' );
-				$plugin_stats = new NAA_Plugin_Stats();
-				$plugin_stats->init();
+				$this->plugin_stats = new NAA_Plugin_Stats();
+				$this->plugin_stats->init();
 				// Load the plugin stats class, and initialize it.
 				require_once( 'includes/widget_stats.php' );
-				$widget_stats = new NAA_Widget_Stats();
-				$widget_stats->init();
+				$this->widget_stats = new NAA_Widget_Stats();
+				$this->widget_stats->init();
 				// Load the user filters class, and initialize it.
 				require_once( 'includes/user_filters.php' );
 				$user_filters = new NAA_User_Filters();
 				$user_filters->init();
 				// Load the plugin's CSS file on the dashboard.
-				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );			
+				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+				// Refresh caches of needed.
+				add_action( 'admin_init', array( $this, 'refresh_caches' ) );
 			}
 		}
 
@@ -50,6 +55,13 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 			}
 			// Enqueue the stylesheet.
 			wp_enqueue_style( 'naa_css', plugin_dir_url( __FILE__ ) . 'css/naa.css' );
+		}
+
+
+		public function refresh_caches(){
+			// Calling the update_cache will refresh the cache only if it has expired.
+			$this->plugin_stats->check_cache_expired();
+			$this->widget_stats->check_cache_expired();
 		}
 
 	}
