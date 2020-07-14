@@ -4,9 +4,9 @@
 if( !defined('ABSPATH') ){ exit; }
 
 
-if( !class_exists('MPWS_Plugin_Stats') ){
+if( !class_exists('NAA_Plugin_Stats') ){
 
-	class MPWS_Plugin_Stats {
+	class NAA_Plugin_Stats {
 
 		/**
 		 * Constructor.
@@ -22,11 +22,11 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 		 */
 		public function admin_menu() {
 			add_submenu_page(
-				'plugins.php',
-				__( 'Plugin Stats', 'multisite-plugin-and-widget-stats' ),
-				__( 'Plugin Stats', 'multisite-plugin-and-widget-stats' ),
+				'naa-dashboard',
+				__( 'Plugin Stats', 'network-admin-assistant' ),
+				__( 'Plugin Stats', 'network-admin-assistant' ),
 				'manage_options',
-				'rt_plugin_stats',
+				'naa-plugin-stats',
 				array( $this, 'settings_page' )
 			);
 		}
@@ -45,8 +45,8 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 
 			// Start the page's output.
 			echo '<div class="wrap">';
-			echo '<h1>' . __( 'Plugin Statistics', 'multisite-plugin-and-widget-stats' ) . '</h1>';
-			echo '<h2>' . __( 'Network activated plugins', 'multisite-plugin-and-widget-stats' ) . '</h2>';
+			echo '<h1>' . __( 'Plugin Statistics', 'network-admin-assistant' ) . '</h1>';
+			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p>';
 			
 			// Get network activated plugins.
@@ -69,7 +69,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 			);
 			$sites = get_sites( $args );
 
-			echo '<h2>' . __( 'Activated plugins', 'multisite-plugin-and-widget-stats' ) . '</h2>';
+			echo '<h2>' . __( 'Activated plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p>';
 
 			// Gather the data by looping through the sites and getting the active_plugins option.
@@ -86,7 +86,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 							$results[$pluginname] = array();
 						}
 						// Add the instance's data to the array.
-						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'multisite-plugin-and-widget-stats' ) . ')</a>';
+						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>';
 					}
 				}
 
@@ -101,7 +101,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 			// Wrap up.
 			echo '</p>';
 			echo '<p><em>';
-			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'multisite-plugin-and-widget-stats' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
+			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
 			echo '</em></p>';
 			echo '</div>';
 		}
@@ -114,7 +114,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
 			$html .= '<thead>';
 			$html .= '<tr>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Plugin name', 'multisite-plugin-and-widget-stats' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Plugin name', 'network-admin-assistant' ) . '</th>';
 			$html .= '</tr>';
 			$html .= '</thead>';
 			$html .= '<tbody>';
@@ -142,8 +142,8 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
 			$html .= '<thead>';
 			$html .= '<tr>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Plugin name', 'multisite-plugin-and-widget-stats' ) . '</th>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Activation count', 'multisite-plugin-and-widget-stats' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Plugin name', 'network-admin-assistant' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Activation count', 'network-admin-assistant' ) . '</th>';
 			$html .= '</tr>';
 			$html .= '</thead>';
 			$html .= '<tbody>';
@@ -155,7 +155,7 @@ if( !class_exists('MPWS_Plugin_Stats') ){
 				$html .= '<td class="column-columnname"><strong>' . $name . '</strong></td>';
 				$html .= '<td class="column-columnname">';
 				$html .= '<details>';
-				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sites.', 'multisite-plugin-and-widget-stats' ), count( $inst ) ) . '</summary>';
+				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sites.', 'network-admin-assistant' ), count( $inst ) ) . '</summary>';
 				$html .= '<ul>';
 				foreach( $inst as $i ){
 					$html .= '<li>' . $i . '</li>';

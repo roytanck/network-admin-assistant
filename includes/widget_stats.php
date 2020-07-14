@@ -4,9 +4,9 @@
 if( !defined('ABSPATH') ){ exit; }
 
 
-if( !class_exists('MPWS_Widget_Stats') ){
+if( !class_exists('NAA_Widget_Stats') ){
 
-	class MPWS_Widget_Stats {
+	class NAA_Widget_Stats {
 
 		/**
 		 * Constructor
@@ -22,11 +22,11 @@ if( !class_exists('MPWS_Widget_Stats') ){
 		 */
 		public function admin_menu() {
 			add_submenu_page(
-				'settings.php',
-				__( 'Widget Stats', 'multisite-plugin-and-widget-stats' ), 
-				__( 'Widget Stats', 'multisite-plugin-and-widget-stats' ),
+				'naa-dashboard',
+				__( 'Widget Stats', 'network-admin-assistant' ),
+				__( 'Widget Stats', 'network-admin-assistant' ),
 				'manage_options',
-				'rt_widget_stats',
+				'naa-widget-stats',
 				array( $this, 'settings_page' )
 			);
 		}
@@ -55,7 +55,7 @@ if( !class_exists('MPWS_Widget_Stats') ){
 
 			// start the page's output
 			echo '<div class="wrap">';
-			echo '<h1>' . __( 'Widget Statistics', 'multisite-plugin-and-widget-stats' ) . '</h1>';
+			echo '<h1>' . __( 'Widget Statistics', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
 
 			// gather the data by looping through the sites and getting the sidebars_widgets option
@@ -73,7 +73,7 @@ if( !class_exists('MPWS_Widget_Stats') ){
 								$results[ $widgetname ] = array();
 							}
 							// add the instance's data to the array
-							$results[ $widgetname ][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id , 'widgets.php' ) ) . '">' . __( 'configure', 'multisite-plugin-and-widget-stats' ) . ')</a>' . ' <em>(' . $sidebarname . ')</em>';
+							$results[ $widgetname ][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id , 'widgets.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>' . ' <em>(' . $sidebarname . ')</em>';
 						}
 					}
 				}
@@ -88,7 +88,7 @@ if( !class_exists('MPWS_Widget_Stats') ){
 			// wrap up
 			echo '</p>';
 			echo '<p><em>';
-			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'multisite-plugin-and-widget-stats' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
+			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
 			echo '</em></p>';
 			echo '</div>';
 		}
@@ -101,8 +101,8 @@ if( !class_exists('MPWS_Widget_Stats') ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
 			$html .= '<thead>';
 			$html .= '<tr>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Widget name', 'multisite-plugin-and-widget-stats' ) . '</th>';
-			$html .= '<th class="manage-column column-columnname">' . __( 'Instance count', 'multisite-plugin-and-widget-stats' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Widget name', 'network-admin-assistant' ) . '</th>';
+			$html .= '<th class="manage-column column-columnname">' . __( 'Instance count', 'network-admin-assistant' ) . '</th>';
 			$html .= '</tr>';
 			$html .= '</thead>';
 			$html .= '<tbody>';
@@ -114,7 +114,7 @@ if( !class_exists('MPWS_Widget_Stats') ){
 				$html .= '<td class="column-columnname"><strong>' . $name . '</strong></td>';
 				$html .= '<td class="column-columnname">';
 				$html .= '<details>';
-				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sidebars.', 'multisite-plugin-and-widget-stats' ), count( $inst ) ) . '</summary>';
+				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sidebars.', 'network-admin-assistant' ), count( $inst ) ) . '</summary>';
 				$html .= '<ul>';
 				foreach( $inst as $i ){
 					$html .= '<li>' . $i . '</li>';
