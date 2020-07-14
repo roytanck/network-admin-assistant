@@ -42,10 +42,12 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Network Admin Assistant', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
+			echo '<div id="naa-dash-container">';
 
+			// Get the stored data for the plugins section.
 			$plugin_stats = get_site_option( 'naa_plugin_stats' );
 
-			echo '<div id="naa-dash-container">';
+			// Render the plugins section.
 			echo '<section>';
 			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
@@ -57,17 +59,27 @@ if( !class_exists('NAA_Dashboard') ){
 			);
 			echo '</p>';
 			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			echo '<section>';
 			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . 56 . '</p>';
 			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
-			echo '</div>';
+
+			// Assemble data for the users section.
+			$users = get_users( array( 'blog_id' => 0 ) );
+
+			echo '<section>';
+			echo '<h2>' . __( 'Users', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . ( isset( $users ) ? count( $users ) : '?' ) . '</p>';
+			echo '<a class="button" href="' . admin_url( 'network/users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
+			echo '</section>';
 
 			// wrap up
+			echo '</div>';
 			echo '</p>';
 			echo '</div>';
 		}
