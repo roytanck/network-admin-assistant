@@ -44,39 +44,16 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<p>';
 			echo '<div id="naa-dash-container">';
 
-			// Get the stored data for the plugins section.
-			$plugin_stats = get_site_option( 'naa_plugin_stats' );
+			// Assemble data for the blogs section
+			$site_count = get_blog_count();
 
-			// Render the plugins section.
+			// Render the blogs section.
 			echo '<section>';
-			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
-			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
+			echo '<h2>' . __( 'Sites', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . $site_count . '</p>';
 			echo '<p class="naa-stats">';
-			printf(
-				esc_html__(	'%1$s network activated, %2$s not active on any site.', 'network-admin-assistant' ),
-				'<strong>' . ( isset( $plugin_stats['network-activated'] ) ? $plugin_stats['network-activated'] : '?' ) . '</strong>',
-				'<strong>' . ( isset( $plugin_stats['inactive'] ) ? $plugin_stats['inactive'] : '?' ) . '</strong>'
-			);
 			echo '</p>';
-			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
-			echo '</section>';
-
-			// Get the stored data for the widgets section.
-			$widget_stats = get_site_option( 'naa_widget_stats' );
-
-			// Render the widgets section.
-			echo '<section>';
-			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
-			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
-			echo '<p class="naa-stats">';
-			printf(
-				esc_html__(	'%1$s widgets are currently in use on at least one site.', 'network-admin-assistant' ),
-				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
-			);
-			echo '</p>';
-			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '<a class="button" href="' . network_admin_url( 'sites.php' ) . '">' . __( 'Manage sites', 'network-admin-assistant' ) . '</a>';
 			echo '</section>';
 
 			// Assemble data for the users section.
@@ -114,6 +91,41 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '</p>';
 			echo '<a class="button" href="' . network_admin_url( 'users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . network_admin_url( 'users.php?naa_user_filter=naa_no_role' ) . '">' . __( 'View users with no role.', 'network-admin-assistant' ) . '</a></p>';
+			echo '</section>';
+
+			// Get the stored data for the plugins section.
+			$plugin_stats = get_site_option( 'naa_plugin_stats' );
+
+			// Render the plugins section.
+			echo '<section>';
+			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
+			echo '<p class="naa-stats">';
+			printf(
+				esc_html__(	'%1$s network activated, %2$s not active on any site.', 'network-admin-assistant' ),
+				'<strong>' . ( isset( $plugin_stats['network-activated'] ) ? $plugin_stats['network-activated'] : '?' ) . '</strong>',
+				'<strong>' . ( isset( $plugin_stats['inactive'] ) ? $plugin_stats['inactive'] : '?' ) . '</strong>'
+			);
+			echo '</p>';
+			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '</section>';
+
+			// Get the stored data for the widgets section.
+			$widget_stats = get_site_option( 'naa_widget_stats' );
+
+			// Render the widgets section.
+			echo '<section>';
+			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
+			echo '<p class="naa-stats">';
+			printf(
+				esc_html__(	'%1$s widgets are currently in use on at least one site.', 'network-admin-assistant' ),
+				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
+			);
+			echo '</p>';
+			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			// wrap up
