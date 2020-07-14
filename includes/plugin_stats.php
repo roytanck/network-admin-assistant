@@ -42,19 +42,35 @@ if( !class_exists('NAA_Plugin_Stats') ){
 
 			// Create a new array to keep the stats in.
 			$results = array();
+			$dashboard_stats = array();
+
+			// Get a complete list of all plugins.
+			// We'll remove active plugins from this to end up with the inactive ones.
+			$installed_plugins = get_plugins();
+			$dashboard_stats['installed'] = count( $installed_plugins );
 
 			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Plugin Statistics', 'network-admin-assistant' ) . '</h1>';
 			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p>';
-			
+
 			// Get network activated plugins.
 			$network_plugins = get_site_option( 'active_sitewide_plugins', null );
-			
+
+			// Remove network activated plugins from our list of installed plugins.
+			foreach( $network_plugins as $key=>$value ){
+				if( array_key_exists( $key, $installed_plugins ) ){
+					unset( $installed_plugins[ $key ] );
+				}
+			}
+
 			// Render the html table.
 			if( !empty( $network_plugins ) ){
 				$this->render_network_activated_table( $network_plugins );
+				$dashboard_stats['network-activated'] = count( $network_plugins );
+			} else {
+				$dashboard_stats['network-activated'] = 0;
 			}
 			
 			echo '</p>';
@@ -87,6 +103,10 @@ if( !class_exists('NAA_Plugin_Stats') ){
 						}
 						// Add the instance's data to the array.
 						$results[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>';
+						// Remove this plugin from the list installed plugins
+						if( array_key_exists( $plugin, $installed_plugins ) ){
+							unset( $installed_plugins[ $plugin ] );
+						}
 					}
 				}
 
@@ -97,6 +117,17 @@ if( !class_exists('NAA_Plugin_Stats') ){
 
 			// Render the html table.
 			$this->render_table( $results );
+			echo '</p>';
+
+			// Store the number of inactive plugins for display on the dahboard.
+			$dashboard_stats['inactive'] = count( $installed_plugins );
+
+			echo '<p>';
+			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . '</h2>';
+
+			if( !empty( $installed_plugins ) ){
+				$this->render_network_activated_table( $installed_plugins );
+			} 
 			
 			// Wrap up.
 			echo '</p>';
@@ -104,6 +135,9 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			printf( __('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ), round( microtime( true ) - $starttime, 3 ), count( $sites ) );
 			echo '</em></p>';
 			echo '</div>';
+
+			// Store the dashboard stats.
+			update_site_option( 'naa_plugin_stats', $dashboard_stats );
 		}
 
 
