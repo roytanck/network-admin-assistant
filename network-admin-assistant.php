@@ -20,20 +20,26 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 	class Network_Admin_Assistant {
 
 		public function init(){
-			// Load the plugin's dashboard class, and initialize it.
-			require_once( 'includes/dashboard.php' );
-			$dashboard = new NAA_Dashboard();
-			$dashboard->init();
-			// Load the plugin stats class, and initialize it.
-			require_once( 'includes/plugin_stats.php' );
-			$plugin_stats = new NAA_Plugin_Stats();
-			$plugin_stats->init();
-			// Load the plugin stats class, and initialize it.
-			require_once( 'includes/widget_stats.php' );
-			$widget_stats = new NAA_Widget_Stats();
-			$widget_stats->init();
-			// Load the plugin's CSS file on the dashboard.
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+			if( is_network_admin() ){
+				// Load the plugin's dashboard class, and initialize it.
+				require_once( 'includes/dashboard.php' );
+				$dashboard = new NAA_Dashboard();
+				$dashboard->init();
+				// Load the plugin stats class, and initialize it.
+				require_once( 'includes/plugin_stats.php' );
+				$plugin_stats = new NAA_Plugin_Stats();
+				$plugin_stats->init();
+				// Load the plugin stats class, and initialize it.
+				require_once( 'includes/widget_stats.php' );
+				$widget_stats = new NAA_Widget_Stats();
+				$widget_stats->init();
+				// Load the user filters class, and initialize it.
+				require_once( 'includes/user_filters.php' );
+				$user_filters = new NAA_User_Filters();
+				$user_filters->init();
+				// Load the plugin's CSS file on the dashboard.
+				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );			
+			}
 		}
 
 

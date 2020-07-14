@@ -51,15 +51,15 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<section>';
 			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
-			echo '<p>';
+			echo '<p class="naa-stats">';
 			printf(
 				esc_html__(	'%1$s network activated, %2$s not active on any site.', 'network-admin-assistant' ),
 				'<strong>' . ( isset( $plugin_stats['network-activated'] ) ? $plugin_stats['network-activated'] : '?' ) . '</strong>',
 				'<strong>' . ( isset( $plugin_stats['inactive'] ) ? $plugin_stats['inactive'] : '?' ) . '</strong>'
 			);
 			echo '</p>';
-			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			// Get the stored data for the widgets section.
@@ -69,14 +69,14 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<section>';
 			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
-			echo '<p>';
+			echo '<p class="naa-stats">';
 			printf(
 				esc_html__(	'%1$s widgets are current in use on at least one site.', 'network-admin-assistant' ),
 				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
 			);
 			echo '</p>';
-			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			// Assemble data for the users section.
@@ -105,14 +105,15 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<section>';
 			echo '<h2>' . __( 'Users', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $users ) ? count( $users ) : '?' ) . '</p>';
-			echo '<p>';
+			echo '<p class="naa-stats">';
 			printf(
 				esc_html__(	'%1$s users have no role on any site, %2$s network admin(s)', 'network-admin-assistant' ),
 				'<strong>' . $users_without_role . '</strong>',
 				'<strong>' . $network_admin_count . '</strong>',
 			);
 			echo '</p>';
-			echo '<a class="button" href="' . admin_url( 'network/users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
+			echo '<a class="button" href="' . network_admin_url( 'users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'users.php?naa_user_filter=naa_no_role' ) . '">' . __( 'View users with no role.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 
 			// wrap up

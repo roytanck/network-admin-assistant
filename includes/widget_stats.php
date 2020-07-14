@@ -9,7 +9,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 	class NAA_Widget_Stats {
 
 		/**
-		 * Constructor
+		 * Set up hooks and filters.
 		 */
 		public function init() {
 			// hook for the admin page
