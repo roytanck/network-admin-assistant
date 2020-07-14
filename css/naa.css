@@ -1,0 +1,26 @@
+#naa-dash-container {
+	display: flex;
+	max-width: 100%;
+}
+
+#naa-dash-container section {
+	flex: 1 0 20%;
+	background-color: #fff;
+	border: 1px solid rgba(0,0,0,0.3);
+	padding: 1em;
+	margin-right: 1em;
+	text-align: center;
+}
+
+#naa-dash-container section h2 {
+	padding: 0;
+	margin: 0;
+}
+
+.naa-large {
+	font-size: 100px;
+	font-weight: normal;
+	color: #0073aa;
+	margin: 0;
+	padding: 0;
+}

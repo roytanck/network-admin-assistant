@@ -43,10 +43,20 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<h1>' . __( 'Network Admin Assistant', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
 
-			echo '<a href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<br />';
-			echo '<a href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
-			
+			echo '<div id="naa-dash-container">';
+			echo '<section>';
+			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . 20 . '</p>';
+			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
+			echo '</section>';
+
+			echo '<section>';
+			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . 56 . '</p>';
+			echo '<a class="button" href="' . admin_url( 'network/admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
+			echo '</section>';
+			echo '</div>';
+
 			// wrap up
 			echo '</p>';
 			echo '</div>';

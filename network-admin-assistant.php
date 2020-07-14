@@ -32,6 +32,18 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 			require_once( 'includes/widget_stats.php' );
 			$widget_stats = new NAA_Widget_Stats();
 			$widget_stats->init();
+			// Load the plugin's CSS file on the dashboard.
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		}
+
+
+		public function enqueue_styles( $hook ){
+			// Check if we're on the right page.
+			if ( 'toplevel_page_naa-dashboard' != $hook ) {
+				return;
+			}
+			// Enqueue the stylesheet.
+			wp_enqueue_style( 'naa_css', plugin_dir_url( __FILE__ ) . 'css/naa.css' );
 		}
 
 	}
