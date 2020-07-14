@@ -59,7 +59,7 @@ if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
 
 
 		public function refresh_caches(){
-			// Calling the update_cache will refresh the cache only if it has expired.
+			// Calling the check_cache_expired will refresh the cache only if it has expired.
 			$this->plugin_stats->check_cache_expired();
 			$this->widget_stats->check_cache_expired();
 		}

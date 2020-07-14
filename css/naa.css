@@ -1,14 +1,16 @@
 #naa-dash-container {
 	display: flex;
+	flex-flow: row wrap;
 	max-width: 100%;
 }
 
 #naa-dash-container section {
-	flex: 1 0 20%;
+	flex: 1 0 10%;
+	min-width: 300px;
 	background-color: #fff;
 	border: 1px solid rgba(0,0,0,0.3);
 	padding: 1em;
-	margin-right: 1em;
+	margin: 0 1em 1em 0;
 	text-align: center;
 }
 
