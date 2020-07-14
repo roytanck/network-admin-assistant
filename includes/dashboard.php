@@ -71,7 +71,7 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
 			echo '<p class="naa-stats">';
 			printf(
-				esc_html__(	'%1$s widgets are current in use on at least one site.', 'network-admin-assistant' ),
+				esc_html__(	'%1$s widgets are currently in use on at least one site.', 'network-admin-assistant' ),
 				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
 			);
 			echo '</p>';
