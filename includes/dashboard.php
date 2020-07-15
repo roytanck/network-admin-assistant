@@ -37,48 +37,106 @@ if( !class_exists('NAA_Dashboard') ){
 		 * Render the options page
 		 */
 		public function settings_page() {
-
 			// start the page's output
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Network Admin Assistant', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
 			echo '<div id="naa-dash-container">';
+			// Render the sections.
+			$this->render_plugins_section();
+			$this->render_widgets_section();
+			$this->render_users_section();
+			// Wrap up.
+			echo '</div>';
+			echo '</p>';
+			echo '</div>';
+		}
 
+
+		/**
+		 * Render the plugins box on the dashboard
+		 */
+		private function render_plugins_section(){
 			// Get the stored data for the plugins section.
 			$plugin_stats = get_site_option( 'naa_plugin_stats' );
-
 			// Render the plugins section.
 			echo '<section>';
 			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
 			echo '<p class="naa-stats">';
-			printf(
-				esc_html__(	'%1$s network activated, %2$s not active on any site.', 'network-admin-assistant' ),
-				'<strong>' . ( isset( $plugin_stats['network-activated'] ) ? $plugin_stats['network-activated'] : '?' ) . '</strong>',
-				'<strong>' . ( isset( $plugin_stats['inactive'] ) ? $plugin_stats['inactive'] : '?' ) . '</strong>'
+			// Create a nice summary with some useful info by first creating parts.
+			$messages = array();
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of network-activated users. */
+					_n(
+						'<strong>%d</strong> is network activated',
+						'<strong>%d</strong> are network activated',
+						(int) $plugin_stats['network-activated'],
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( (int) $plugin_stats['network-activated'] )
 			);
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of inactive plugins. */
+					_n(
+						'<strong>%d</strong> is not active on any site',
+						'<strong>%d</strong> are not active on any site',
+						(int) $plugin_stats['inactive'],
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( (int) $plugin_stats['inactive'] )
+			);
+			// Echo the parts glued together.
+			echo implode( ', ', $messages );
+			// Wrap up.
 			echo '</p>';
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
+		}
 
+
+		/**
+		 * Render the plugins box on the dashboard
+		 */
+		private function render_widgets_section(){
 			// Get the stored data for the widgets section.
 			$widget_stats = get_site_option( 'naa_widget_stats' );
-
 			// Render the widgets section.
 			echo '<section>';
 			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</p>';
 			echo '<p class="naa-stats">';
 			printf(
-				esc_html__(	'%1$s widgets are currently in use on at least one site.', 'network-admin-assistant' ),
-				'<strong>' . ( isset( $widget_stats['active'] ) ? $widget_stats['active'] : '?' ) . '</strong>',
+				wp_kses(
+					/* translators: Number of sites a widget is used on. */
+					_n(
+						'<strong>%d</strong> widget is currently in use on at least one site.',
+						'<strong>%d</strong> widgets are currently in use on at least one site.',
+						(int) $widget_stats['active'],
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( (int) $widget_stats['active'] )
 			);
 			echo '</p>';
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
+		}
 
+
+		/**
+		 * Render the users box on the dashboard
+		 */
+		private function render_users_section(){
 			// Assemble data for the users section.
 			$users = get_users(
 				array(
@@ -100,26 +158,46 @@ if( !class_exists('NAA_Dashboard') ){
 					}
 				}
 			}
-
 			// Render the users section.
 			echo '<section>';
 			echo '<h2>' . __( 'Users', 'network-admin-assistant' ) . '</h2>';
 			echo '<p class="naa-large">' . ( isset( $users ) ? count( $users ) : '?' ) . '</p>';
 			echo '<p class="naa-stats">';
-			printf(
-				esc_html__(	'%1$s users have no role on any site, %2$s network admin(s)', 'network-admin-assistant' ),
-				'<strong>' . $users_without_role . '</strong>',
-				'<strong>' . $network_admin_count . '</strong>',
+			// Create a nice summary with some useful info by first creating parts.
+			$messages = array();
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of users with no role. */
+					_n(
+						'<strong>%s</strong> user has no role on any site',
+						'<strong>%s</strong> users have no role on any site',
+						$users_without_role,
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( $users_without_role )
 			);
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of network admin users. */
+					_n(
+						'there is <strong>%d</strong> network admin',
+						'there are <strong>%d</strong> network admins',
+						$network_admin_count,
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( $network_admin_count )
+			);
+			// Echo the parts glued together.
+			echo implode( ', ', $messages );
+			// Wrap up.
 			echo '</p>';
 			echo '<a class="button" href="' . network_admin_url( 'users.php' ) . '">' . __( 'Manage users', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . network_admin_url( 'users.php?naa_user_filter=naa_no_role' ) . '">' . __( 'View users with no role.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
-
-			// wrap up
-			echo '</div>';
-			echo '</p>';
-			echo '</div>';
 		}
 
 	}
