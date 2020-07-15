@@ -87,26 +87,28 @@ if( !class_exists('NAA_Plugin_Stats') ){
 
 			// Gather the data by looping through the sites and getting the active_plugins option.
 			foreach( $sites as $site ){
-				
+
 				$plugins = get_blog_option( $site->blog_id, 'active_plugins', null );
 			
 				foreach( $plugins as $plugin ){
 					if( !empty( $plugin ) ){
-						// Clean up the php file path that WordPress stores to get a "semi-readable" name.
-						$pluginname = $this->get_plugin_name( $plugin );
-						// Make sure there's an array for this plugin.
-						if( !isset($active_plugins[$pluginname]) || !is_array( $active_plugins[$pluginname] ) ){
-							$active_plugins[$pluginname] = array();
-						}
-						// Add the instance's data to the array.
-						$active_plugins[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>';
-						// Remove this plugin from the list installed plugins
-						if( array_key_exists( $plugin, $installed_plugins ) ){
-							unset( $installed_plugins[ $plugin ] );
+						// Exclude the plugin if it is (also) network-activated.
+						if( ! array_key_exists( $plugin, $network_plugins ) ){
+							// Clean up the php file path that WordPress stores to get a "semi-readable" name.
+							$pluginname = $this->get_plugin_name( $plugin );
+							// Make sure there's an array for this plugin.
+							if( ! isset( $active_plugins[ $pluginname ] ) || ! is_array( $active_plugins[ $pluginname ] ) ){
+								$active_plugins[$pluginname] = array();
+							}
+							// Add the instance's data to the array.
+							$active_plugins[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>';
+							// Remove this plugin from the list installed plugins
+							if( array_key_exists( $plugin, $installed_plugins ) ){
+								unset( $installed_plugins[ $plugin ] );
+							}
 						}
 					}
 				}
-
 			}
 
 			// Sort the results array alphabetically.
