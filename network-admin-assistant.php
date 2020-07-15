@@ -15,7 +15,7 @@
 if( !defined('ABSPATH') ){ exit; }
 
 
-if( !class_exists('Network_Admin_Assistant') && is_multisite() ){
+if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 
 	class Network_Admin_Assistant {
 
