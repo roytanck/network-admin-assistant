@@ -1,7 +1,6 @@
 <?php
 /*
 	Plugin Name: Network Admin Assistant
-	Plugin URI:  http://www.roytanck.com
 	Description: Provides helpful information for WordPress multisite network administrators.
 	Version:     1.0
 	Author:      Roy Tanck

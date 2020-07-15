@@ -16,7 +16,7 @@ This plugin will help you:
 1. Find plugins that are not active on any blog.
 1. Determine the impact in case a plugin needs to be upgraded, removed or reconfigured.
 1. See if a widget is in use on any blogs, and track down where.
-1. Find users who do not have a role on any site (and are not network administrators)
+1. Find users who do not have a role on any site (and are not network administrators).
 
 This plugin currently does nothing on single-site WordPress installs.
 
@@ -35,7 +35,7 @@ When you're managing a network of WordPress sites, it can be hard to determine w
 
 Also when a plugin is updated, sometimes it will need to be reconfigured. This plugin can help you find the sites this applies to, so you don't have to manually go through all of them.
 
-The plugin also adds a 'view' to the Users screen, that filters the list to show only users with no role anywhere on the network. You can then decide whether they need to be deleted.
+The plugin also adds a 'view' to the Users screen, that filters the list to show only users with no role anywhere on the network. You can then decide whether they need to be removed at the network level.
 
 = Is this going to slow down my site? =
 
