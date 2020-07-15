@@ -153,7 +153,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			echo '<h1>' . __( 'Plugin Statistics', 'network-admin-assistant' ) . '</h1>';
 
 			// Network activated plugins.
-			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . '</h2>';
+			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . ' (' . count( $stats['network_plugins'] ) . ')</h2>';
 			echo '<p>';
 			if( !empty( $stats['network_plugins'] ) ){
 				$this->render_network_activated_table( $stats['network_plugins'] );
@@ -161,17 +161,17 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			echo '</p>';
 
 			// Activated plugins.
-			echo '<h2>' . __( 'Activated plugins', 'network-admin-assistant' ) . '</h2>';
+			echo '<h2>' . __( 'Activated plugins', 'network-admin-assistant' ) . ' (' . count( $stats['active_plugins'] ) . ')</h2>';
 			echo '<p>';
 			$this->render_table( $stats['active_plugins'] );
 			echo '</p>';
 
 			// Inactive plugins.
 			echo '<p>';
-			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . '</h2>';
+			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . ' (' . count( $stats['inactive_plugins'] ) . ')</h2>';
 			if( !empty( $stats['inactive_plugins'] ) ){
 				$this->render_network_activated_table( $stats['inactive_plugins'] );
-			} 
+			}
 			echo '</p>';
 
 			// Wrap up.
