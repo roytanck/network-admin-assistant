@@ -101,7 +101,11 @@ if( !class_exists('NAA_Plugin_Stats') ){
 								$active_plugins[$pluginname] = array();
 							}
 							// Add the instance's data to the array.
-							$active_plugins[$pluginname][] = '<a href="' . $site->siteurl . '">' . $site->blogname . '</a> (<a href="' . esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ) . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a>';
+							$active_plugins[$pluginname][] = array(
+								'siteurl'  => $site->siteurl,
+								'blogname' => $site->blogname,
+								'url'      => esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ),
+							);
 							// Remove this plugin from the list installed plugins
 							if( array_key_exists( $plugin, $installed_plugins ) ){
 								unset( $installed_plugins[ $plugin ] );
@@ -225,15 +229,15 @@ if( !class_exists('NAA_Plugin_Stats') ){
 
 			$count = 0;
 
-			foreach( $active_plugins as $name=>$inst ){
+			foreach( $active_plugins as $name => $activations ){
 				$html .= '<tr' . ( ( $count % 2 == 0 ) ? ' class="alternate"' : '' ) . '>';
 				$html .= '<td class="column-columnname"><strong>' . $name . '</strong></td>';
 				$html .= '<td class="column-columnname">';
 				$html .= '<details>';
-				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sites.', 'network-admin-assistant' ), count( $inst ) ) . '</summary>';
+				$html .= '<summary>' . sprintf( esc_html__( 'Active on %d sites.', 'network-admin-assistant' ), count( $activations ) ) . '</summary>';
 				$html .= '<ul>';
-				foreach( $inst as $i ){
-					$html .= '<li>' . $i . '</li>';
+				foreach( $activations as $a ){
+					$html .= '<li><a href="' . $a['siteurl'] . '">' . $a['blogname'] . '</a> (<a href="' . $a['url'] . '">' . __( 'configure', 'network-admin-assistant' ) . ')</a></li>';
 				}
 				$html .= '</ul>';
 				$html .= '</details>';
