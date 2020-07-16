@@ -11,7 +11,7 @@
 	Network:     true
 */
 
-// if called without WordPress, exit
+// If called without WordPress, exit.
 if( !defined('ABSPATH') ){ exit; }
 
 
@@ -22,6 +22,10 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 		private $plugin_stats = null;
 		private $widget_stats = null;
 
+
+		/**
+		 * Sets up class instances and hooks.
+		 */
 		public function init(){
 			if( is_network_admin() ){
 				// Load the plugin's dashboard class, and initialize it.
@@ -48,6 +52,9 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 		}
 
 
+		/**
+		 * Enqueue the plugin's styles (on the plugin's "dashboard" only).
+		 */
 		public function enqueue_styles( $hook ){
 			// Check if we're on the right page.
 			if ( 'toplevel_page_naa-dashboard' != $hook ) {
@@ -58,6 +65,9 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 		}
 
 
+		/**
+		 * Check if there's a cached copy of the plugin/widget statistics, and creates them if not.
+		 */
 		public function refresh_caches(){
 			if( is_network_admin() ){
 				// Calling the check_cache_expired will refresh the cache only if it has expired.
@@ -68,7 +78,7 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 
 	}
 
-	// create an instance of the class
+	// Create an instance of the class.
 	$network_admin_assistant = new Network_Admin_Assistant();
 	$network_admin_assistant->init();
 

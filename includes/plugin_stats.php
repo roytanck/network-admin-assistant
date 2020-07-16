@@ -1,6 +1,6 @@
 <?php
 
-// if called without WordPress, exit
+// If called without WordPress, exit.
 if( !defined('ABSPATH') ){ exit; }
 
 
@@ -12,11 +12,14 @@ if( !class_exists('NAA_Plugin_Stats') ){
 		 * Set up hooks and filters.
 		 */
 		public function init() {
-			// hook for the admin page
+			// Add the network admin page.
 			add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 		}
 
 
+		/**
+		 * Check if there are cached stats, refresh if not.
+		 */
 		public function check_cache_expired() {
 			// Get fresh stats if needed. This will also cache them and refresh the dashboard stats.
 			$stats = $this->gather_stats( false );
@@ -106,7 +109,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 								'blogname' => $site->blogname,
 								'url'      => esc_url( get_admin_url( $site->blog_id, 'plugins.php' ) ),
 							);
-							// Remove this plugin from the list installed plugins
+							// Remove this plugin from the list installed plugins.
 							if( array_key_exists( $plugin, $installed_plugins ) ){
 								unset( $installed_plugins[ $plugin ] );
 							}
@@ -124,6 +127,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			// Store the dashboard stats.
 			update_site_option( 'naa_plugin_stats', $dashboard_stats );
 
+			// Assemble a nice array of stats to cache.
 			$stats = array(
 				'processing_time'  => round( microtime( true ) - $starttime, 3 ),
 				'network_plugins'  => $network_plugins,
@@ -156,7 +160,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			echo '<h2>' . __( 'Network activated plugins', 'network-admin-assistant' ) . ' (' . count( $stats['network_plugins'] ) . ')</h2>';
 			echo '<p>';
 			if( !empty( $stats['network_plugins'] ) ){
-				$this->render_network_activated_table( $stats['network_plugins'] );
+				$this->render_simple_table( $stats['network_plugins'] );
 			}
 			echo '</p>';
 
@@ -170,7 +174,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			echo '<p>';
 			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . ' (' . count( $stats['inactive_plugins'] ) . ')</h2>';
 			if( !empty( $stats['inactive_plugins'] ) ){
-				$this->render_network_activated_table( $stats['inactive_plugins'] );
+				$this->render_simple_table( $stats['inactive_plugins'] );
 			}
 			echo '</p>';
 
@@ -187,9 +191,9 @@ if( !class_exists('NAA_Plugin_Stats') ){
 
 
 		/**
-		 * Gets passed the network activated plugins array, renders a nice HTML table.
+		 * Gets passed the network activated or inactive plugins array, renders a nice HTML table.
 		 */
-		private function render_network_activated_table( $active_plugins ){
+		private function render_simple_table( $active_plugins ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
 			$html .= '<thead>';
 			$html .= '<tr>';

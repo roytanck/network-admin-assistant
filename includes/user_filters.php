@@ -1,6 +1,6 @@
 <?php
 
-// if called without WordPress, exit
+// If called without WordPress, exit.
 if( !defined('ABSPATH') ){ exit; }
 
 
@@ -18,13 +18,16 @@ if( !class_exists('NAA_User_Filters') ){
 			add_action( 'views_users-network', array( $this, 'add_view' ), 10, 1 );
 			// Use an early hook to get no-role users (to later exlude them from the query).
 			add_action( 'admin_init', array( $this, 'get_users_without_role' ) );
-			// Use pre_get_users to filter the user listing
+			// Use pre_get_users to filter the user listing.
 			add_action( 'pre_get_users', array( $this, 'filter_user_query' ), 10, 1 );
 		}
 
 
+		/**
+		 * Adds the 'No role' view to the top of the network admin users screen.
+		 */
 		public function add_view( $views ){
-			// Are we on 'our' view?
+			// Are we currently on 'our' view?
 			$filtered = ( isset( $_GET['naa_user_filter'] ) && 'naa_no_role' == $_GET['naa_user_filter'] );
 			// If so, remove the 'current' attributes from the other views (yes, this is a hack).
 			if( $filtered ){
@@ -32,7 +35,7 @@ if( !class_exists('NAA_User_Filters') ){
 					$views[ $key ] = str_replace( ' class="current" aria-current="page"', '', $views[ $key ] );
 				}
 			}
-
+			// Add the new view to the $views array (code mostly copied from WP core).
 			$current_link_attributes = $filtered ? ' class="current" aria-current="page"' : '';
 			$views['naa_no_role'] = sprintf(
 				'<a href="%s"%s>%s</a>',
@@ -55,6 +58,9 @@ if( !class_exists('NAA_User_Filters') ){
 		}
 
 
+		/**
+		 * If the 'No role' view is acive, limit the query to just the IDs stored by get_users_without_role().
+		 */
 		public function filter_user_query( $query ){
 			// Exit if not in wp-admin.
 			if( ! is_network_admin() ){
@@ -75,8 +81,11 @@ if( !class_exists('NAA_User_Filters') ){
 		}
 
 
+		/**
+		 * Find users with no role on any site.
+		 */
 		public function get_users_without_role(){
-			// Exit if not in wp-admin.
+			// Exit if not in the network admin section.
 			if( ! is_network_admin() ){
 				return;
 			}

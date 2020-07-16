@@ -1,6 +1,6 @@
 <?php
 
-// if called without WordPress, exit
+// If called without WordPress, exit.
 if( !defined('ABSPATH') ){ exit; }
 
 
@@ -9,10 +9,10 @@ if( !class_exists('NAA_Dashboard') ){
 	class NAA_Dashboard {
 
 		/**
-		 * Constructor
+		 * Set up hooks.
 		 */
 		public function init() {
-			// hook for the admin page
+			// Hook for adding the admin page.
 			add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 		}
 
@@ -34,10 +34,10 @@ if( !class_exists('NAA_Dashboard') ){
 
 
 		/**
-		 * Render the options page
+		 * Render the options page.
 		 */
 		public function settings_page() {
-			// start the page's output
+			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Network Admin Assistant', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
@@ -54,7 +54,7 @@ if( !class_exists('NAA_Dashboard') ){
 
 
 		/**
-		 * Render the plugins box on the dashboard
+		 * Render the plugins box on the dashboard.
 		 */
 		private function render_plugins_section(){
 			// Get the stored data for the plugins section.
@@ -103,7 +103,7 @@ if( !class_exists('NAA_Dashboard') ){
 
 
 		/**
-		 * Render the plugins box on the dashboard
+		 * Render the plugins box on the dashboard.
 		 */
 		private function render_widgets_section(){
 			// Get the stored data for the widgets section.
@@ -134,7 +134,7 @@ if( !class_exists('NAA_Dashboard') ){
 
 
 		/**
-		 * Render the users box on the dashboard
+		 * Render the users box on the dashboard.
 		 */
 		private function render_users_section(){
 			// Assemble data for the users section.

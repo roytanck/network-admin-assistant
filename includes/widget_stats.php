@@ -1,6 +1,6 @@
 <?php
 
-// if called without WordPress, exit
+// If called without WordPress, exit.
 if( !defined('ABSPATH') ){ exit; }
 
 
@@ -12,13 +12,13 @@ if( !class_exists('NAA_Widget_Stats') ){
 		 * Set up hooks and filters.
 		 */
 		public function init() {
-			// hook for the admin page
+			// Add the network admin page.
 			add_action( 'network_admin_menu', array( $this, 'admin_menu' ) );
 		}
 
 
 		/**
-		 * Add a new options page to the network admin
+		 * Add a new options page to the network admin.
 		 */
 		public function admin_menu() {
 			add_submenu_page(
@@ -32,6 +32,9 @@ if( !class_exists('NAA_Widget_Stats') ){
 		}
 
 
+		/**
+		 * Check if there are cached stats, refresh if not.
+		 */
 		public function check_cache_expired() {
 			// Get fresh stats if needed. This will also cache them and refresh the dashboard stats.
 			$stats = $this->gather_stats( false );
@@ -48,14 +51,14 @@ if( !class_exists('NAA_Widget_Stats') ){
 				}
 			}
 
-			// start a timer to keep track of processing time
+			// Start a timer to keep track of processing time.
 			$starttime = microtime( true );
 
-			// create a new array to keep the stats in
+			// Create a new array to keep the stats in.
 			$active_widgets = array();
 			$dashboard_stats = array();
 
-			// get all currently published sites
+			// Get all currently published sites.
 			$args = array(
 				'archived'   => 0,
 				'mature'     => 0,
@@ -65,7 +68,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 			);
 			$sites = get_sites( $args );
 
-			// gather the data by looping through the sites and getting the sidebars_widgets option
+			// Gather the data by looping through the sites and getting the sidebars_widgets option.
 			foreach( $sites as $site ){
 				
 				$sidebars = get_blog_option( $site->blog_id, 'sidebars_widgets', null );
@@ -86,7 +89,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 				}
 			}
 
-			// sort the results array alphabetically
+			// Sort the results array alphabetically.
 			ksort( $active_widgets );
 
 			// Store the number of widgets that are active for use on the dashboard.
@@ -95,6 +98,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 			// Store the dashboard stats.
 			update_site_option( 'naa_widget_stats', $dashboard_stats );
 
+			// Create a nice array of stats to cache.
 			$stats = array(
 				'processing_time' => round( microtime( true ) - $starttime, 3 ),
 				'active_widgets'  => $active_widgets,
@@ -110,21 +114,21 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 
 		/**
-		 * Render the options page
+		 * Render the options page.
 		 */
 		public function settings_page() {
 
 			$stats = $this->gather_stats( true );
 
-			// start the page's output
+			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Widget Statistics', 'network-admin-assistant' ) . '</h1>';
 			echo '<p>';
 
-			// render the html table
+			// Render the html table.
 			$this->render_table( $stats['active_widgets'] );
 			
-			// wrap up
+			// Wrap up.
 			echo '</p>';
 			echo '<p><em>';
 			printf(
@@ -139,7 +143,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 
 		/**
-		 * Gets passed the results array, renders a nice HTML table
+		 * Gets passed the results array, renders a nice HTML table.
 		 */
 		private function render_table( $active_widgets ){
 			$html = '<table class="widefat fixed" cellspacing="0">';
@@ -178,7 +182,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 
 		/**
-		 * Check sidebar names agains a couple the WP uses internally
+		 * Check sidebar names agains a couple the WP uses internally.
 		 */
 		private function is_valid_sidebar( $name ){
 			$reserved_names = array( 'wp_inactive_widgets', 'array_version', 'orphaned_widgets' );
@@ -192,7 +196,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 
 
 		/**
-		 * Strip the instance number from a widget id to get the "real" name
+		 * Strip the instance number from a widget id to get the "real" name.
 		 */
 		private function get_widget_name( $id_str ){
 			if( strpos( $id_str, '-' ) !== false ){
