@@ -179,7 +179,7 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			printf(
 				__('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ),
 				$stats['processing_time'],
-				$stats['site_count'],
+				$stats['site_count']
 			);
 			echo '</em></p>';
 			echo '</div>';
