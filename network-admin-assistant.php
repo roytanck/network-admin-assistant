@@ -21,6 +21,7 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 
 		private $plugin_stats = null;
 		private $widget_stats = null;
+		private $theme_stats  = null;
 
 
 		/**
@@ -40,6 +41,10 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 				require_once( 'includes/widget_stats.php' );
 				$this->widget_stats = new NAA_Widget_Stats();
 				$this->widget_stats->init();
+				// Load the theme stats class, and initialize it.
+				require_once( 'includes/theme_stats.php' );
+				$this->theme_stats = new NAA_Theme_Stats();
+				$this->theme_stats->init();
 				// Load the user filters class, and initialize it.
 				require_once( 'includes/user_filters.php' );
 				$user_filters = new NAA_User_Filters();
@@ -73,6 +78,7 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 				// Calling the check_cache_expired will refresh the cache only if it has expired.
 				$this->plugin_stats->check_cache_expired();
 				$this->widget_stats->check_cache_expired();
+				$this->theme_stats->check_cache_expired();
 			}
 		}
 

@@ -45,6 +45,7 @@ if( !class_exists('NAA_Dashboard') ){
 			// Render the sections.
 			$this->render_plugins_section();
 			$this->render_widgets_section();
+			$this->render_themes_section();
 			$this->render_users_section();
 			// Wrap up.
 			echo '</div>';
@@ -103,7 +104,7 @@ if( !class_exists('NAA_Dashboard') ){
 
 
 		/**
-		 * Render the plugins box on the dashboard.
+		 * Render the widgets box on the dashboard.
 		 */
 		private function render_widgets_section(){
 			// Get the stored data for the widgets section.
@@ -129,6 +130,55 @@ if( !class_exists('NAA_Dashboard') ){
 			echo '</p>';
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
 			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			echo '</section>';
+		}
+
+
+		/**
+		 * Render the themes box on the dashboard.
+		 */
+		private function render_themes_section(){
+			// Get the stored data for the themes section.
+			$plugin_stats = get_site_option( 'naa_theme_stats' );
+			// Render the themes section.
+			echo '<section>';
+			echo '<h2>' . __( 'Themes', 'network-admin-assistant' ) . '</h2>';
+			echo '<p class="naa-large">' . ( isset( $plugin_stats['installed'] ) ? $plugin_stats['installed'] : '?' ) . '</p>';
+			echo '<p class="naa-stats">';
+			// Create a nice summary with some useful info by first creating parts.
+			$messages = array();
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of parent themes in use. */
+					_n(
+						'<strong>%d</strong> parent theme is in use',
+						'<strong>%d</strong> parent themes are in use.',
+						(int) $plugin_stats['parent-themes'],
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( (int) $plugin_stats['parent-themes'] )
+			);
+			$messages[] = sprintf(
+				wp_kses(
+					/* translators: Number of inactive themes. */
+					_n(
+						'<strong>%d</strong> theme is not active on any site',
+						'<strong>%d</strong> themes are not active on any site',
+						(int) $plugin_stats['inactive'],
+						'network-admin-assistant'
+					),
+					array( 'strong' => array() )
+				),
+				number_format_i18n( (int) $plugin_stats['inactive'] )
+			);
+			// Echo the parts glued together.
+			echo implode( ', ', $messages );
+			// Wrap up.
+			echo '</p>';
+			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-theme-stats' ) . '">' . __( 'Theme statistics', 'network-admin-assistant' ) . '</a>';
+			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-theme-stats' ) . '">' . __( 'Visit the Theme Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
 			echo '</section>';
 		}
 
