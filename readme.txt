@@ -3,7 +3,7 @@ Contributors: roytanck
 Tags: multisite, network, plugins, widgets, users, statistics, roles
 Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -13,8 +13,8 @@ Helps you manage a WordPress network by displaying useful statistics.
 
 This plugin will help you:
 
-1. Find plugins that are not active on any blog.
-1. Determine the impact in case a plugin needs to be upgraded, removed or reconfigured.
+1. Find plugins and themes that are not active on any blog.
+1. Determine the impact in case a theme/plugin needs to be upgraded, removed or reconfigured.
 1. See if a widget is in use on any blogs, and track down where.
 1. Find users who do not have a role on any site (and are not network administrators).
 
@@ -43,6 +43,9 @@ On the front-end, no. On large networks, the admin page will likely be slow, esp
 
 == Changelog ==
 
-= 1.0 =
+= 1.1 (2020-07-16) =
+* Adds theme statistics, as suggested by @mamaduka.
+
+= 1.0 (2020-07-16) =
 * Initial release
 * This plugin replaces (and improves on) the "RT Plugin Statistics" and "RT Widget Statistics" plugins.
