@@ -186,8 +186,8 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			echo '</p>';
 
 			// Inactive plugins.
-			echo '<p>';
 			echo '<h2>' . __( 'Inactive plugins', 'network-admin-assistant' ) . ' (' . count( $stats['inactive_plugins'] ) . ')</h2>';
+			echo '<p>';
 			if( !empty( $stats['inactive_plugins'] ) ){
 				$this->render_simple_table( $stats['inactive_plugins'] );
 			}

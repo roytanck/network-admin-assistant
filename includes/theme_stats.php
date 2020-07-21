@@ -175,7 +175,6 @@ if( !class_exists('NAA_Theme_Stats') ){
 			echo ' <a href="' . add_query_arg(  'naa_refresh', $stats['timestamp'] ) . '">' . __( 'Click here to refresh.', 'network-admin-assistant' ) . '</a>';
 			echo '</p>';
 
-
 			// Activated themes.
 			echo '<h2>' . __( 'Activated themes', 'network-admin-assistant' ) . ' (' . count( $stats['active_themes'] ) . ')</h2>';
 			echo '<p>';
@@ -183,16 +182,16 @@ if( !class_exists('NAA_Theme_Stats') ){
 			echo '</p>';
 
 			// Parent themes.
-			echo '<p>';
 			echo '<h2>' . __( 'Parent themes used by currently active themes', 'network-admin-assistant' ) . ' (' . count( $stats['parent_themes'] ) . ')</h2>';
+			echo '<p>';
 			if( !empty( $stats['inactive_themes'] ) ){
 				$this->render_parents_table( $stats['parent_themes'] );
 			}
 			echo '</p>';
 
 			// Inactive themes.
-			echo '<p>';
 			echo '<h2>' . __( 'Inactive themes', 'network-admin-assistant' ) . ' (' . count( $stats['inactive_themes'] ) . ')</h2>';
+			echo '<p>';
 			if( !empty( $stats['inactive_themes'] ) ){
 				$this->render_simple_table( $stats['inactive_themes'] );
 			}

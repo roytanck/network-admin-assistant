@@ -129,7 +129,6 @@ if( !class_exists('NAA_Widget_Stats') ){
 			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Widget Statistics', 'network-admin-assistant' ) . '</h1>';
-			echo '<p>';
 
 			// Provide some info about caching.
 			echo '<p>';
@@ -142,10 +141,10 @@ if( !class_exists('NAA_Widget_Stats') ){
 			echo '</p>';
 
 			// Render the html table.
+			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . ' (' . count( $stats['active_widgets'] ) . ')</h2>';
 			$this->render_table( $stats['active_widgets'] );
 			
 			// Wrap up.
-			echo '</p>';
 			echo '<p><em>';
 			printf(
 				__('Page render time: %1$s seconds, sites queried: %2$s', 'network-admin-assistant' ),
@@ -154,7 +153,6 @@ if( !class_exists('NAA_Widget_Stats') ){
 			);
 			echo '</em></p>';
 			echo '</div>';
-
 		}
 
 
