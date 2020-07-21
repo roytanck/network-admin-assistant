@@ -3,7 +3,7 @@
 	Plugin Name: Network Admin Assistant
 	Plugin URI:  https://roytanck.com/2020/07/16/network-admin-assistant-helps-keep-your-multisite-wordpress-tidy/
 	Description: Provides helpful information for WordPress multisite network administrators.
-	Version:     1.1
+	Version:     1.2
 	Author:      Roy Tanck
 	Author URI:  http://www.roytanck.com
 	Domain path: /languages
