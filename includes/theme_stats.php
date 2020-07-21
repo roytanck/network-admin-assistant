@@ -154,11 +154,27 @@ if( !class_exists('NAA_Theme_Stats') ){
 		public function settings_page() {
 
 			// Get the statistics.
-			$stats = $this->gather_stats( true );
+			$stats = $this->gather_stats( false );
+
+			// If the refresh parameter is on the URL, and it matches the current stats timestamp, het fresh stats.
+			if( isset( $_GET['naa_refresh'] ) && (int) $_GET['naa_refresh'] == $stats['timestamp'] ){
+				$stats = $this->gather_stats( true );
+			}
 
 			// Start the page's output.
 			echo '<div class="wrap">';
 			echo '<h1>' . __( 'Theme Statistics', 'network-admin-assistant' ) . '</h1>';
+
+			// Provide some info about caching.
+			echo '<p>';
+			if( isset( $stats['timestamp'] ) ){
+				echo sprintf( __( 'Data cached at %s.', 'network-admin-assistant' ), date_i18n( get_option('date_format') . ' - ' . get_option('time_format'), $stats['timestamp'] ) );
+			} else {
+				echo __( 'No cached data available.', 'network-admin-assistant' );
+			}
+			echo ' <a href="' . add_query_arg(  'naa_refresh', $stats['timestamp'] ) . '">' . __( 'Click here to refresh.', 'network-admin-assistant' ) . '</a>';
+			echo '</p>';
+
 
 			// Activated themes.
 			echo '<h2>' . __( 'Activated themes', 'network-admin-assistant' ) . ' (' . count( $stats['active_themes'] ) . ')</h2>';

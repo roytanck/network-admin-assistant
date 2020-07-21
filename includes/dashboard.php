@@ -120,6 +120,7 @@ if( !class_exists('NAA_Dashboard') ){
 		private function render_widgets_section(){
 			// Get the stored data for the widgets section.
 			$widget_stats = get_site_option( 'naa_widget_stats' );
+			$cached_stats = get_site_transient( 'naa_widget_data' );
 			// Render the widgets section.
 			echo '<section>';
 			echo '<h2>' . __( 'Widgets', 'network-admin-assistant' ) . '</h2>';
@@ -139,8 +140,19 @@ if( !class_exists('NAA_Dashboard') ){
 				number_format_i18n( (int) $widget_stats['active'] )
 			);
 			echo '</p>';
+			// Button to go to the widgets screen.
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Widget statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			// Caching info.
+			echo '<p>';
+			if( isset( $cached_stats['timestamp'] ) ){
+				echo sprintf( __( 'Last updated at %s.', 'network-admin-assistant' ), date_i18n( get_option('date_format') . ' - ' . get_option('time_format'), $cached_stats['timestamp'] ) );
+			} else {
+				echo __( 'No cached data available.', 'network-admin-assistant' );
+			}
+			echo '<br />';
+			echo '<a href="' . network_admin_url( 'admin.php?page=naa-widget-stats' ) . '">' . __( 'Visit the Widget Stats page to update these statistics.', 'network-admin-assistant' ) . '</a>';
+			echo '</p>';
+			// Wrap up.
 			echo '</section>';
 		}
 
@@ -151,6 +163,7 @@ if( !class_exists('NAA_Dashboard') ){
 		private function render_themes_section(){
 			// Get the stored data for the themes section.
 			$plugin_stats = get_site_option( 'naa_theme_stats' );
+			$cached_stats = get_site_transient( 'naa_theme_data' );
 			// Render the themes section.
 			echo '<section>';
 			echo '<h2>' . __( 'Themes', 'network-admin-assistant' ) . '</h2>';
@@ -186,10 +199,20 @@ if( !class_exists('NAA_Dashboard') ){
 			);
 			// Echo the parts glued together.
 			echo implode( ', ', $messages );
-			// Wrap up.
 			echo '</p>';
+			// Button to go to the themes screen.
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-theme-stats' ) . '">' . __( 'Theme statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-theme-stats' ) . '">' . __( 'Visit the Theme Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			// Caching info.
+			echo '<p>';
+			if( isset( $cached_stats['timestamp'] ) ){
+				echo sprintf( __( 'Last updated at %s.', 'network-admin-assistant' ), date_i18n( get_option('date_format') . ' - ' . get_option('time_format'), $cached_stats['timestamp'] ) );
+			} else {
+				echo __( 'No cached data available.', 'network-admin-assistant' );
+			}
+			echo '<br />';
+			echo '<a href="' . network_admin_url( 'admin.php?page=naa-theme-stats' ) . '">' . __( 'Visit the Theme Stats page to update these statistics.', 'network-admin-assistant' ) . '</a>';
+			echo '</p>';
+			// Wrap up.
 			echo '</section>';
 		}
 
