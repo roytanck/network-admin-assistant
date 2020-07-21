@@ -60,6 +60,7 @@ if( !class_exists('NAA_Dashboard') ){
 		private function render_plugins_section(){
 			// Get the stored data for the plugins section.
 			$plugin_stats = get_site_option( 'naa_plugin_stats' );
+			$cached_stats = get_site_transient( 'naa_plugin_data' );
 			// Render the plugins section.
 			echo '<section>';
 			echo '<h2>' . __( 'Plugins', 'network-admin-assistant' ) . '</h2>';
@@ -95,10 +96,20 @@ if( !class_exists('NAA_Dashboard') ){
 			);
 			// Echo the parts glued together.
 			echo implode( ', ', $messages );
-			// Wrap up.
 			echo '</p>';
+			// Button to go to the plugins screen.
 			echo '<a class="button" href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Plugin statistics', 'network-admin-assistant' ) . '</a>';
-			echo '<p><a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a></p>';
+			// Caching info.
+			echo '<p>';
+			if( isset( $cached_stats['timestamp'] ) ){
+				echo sprintf( __( 'Last updated at %s.', 'network-admin-assistant' ), date_i18n( get_option('date_format') . ' - ' . get_option('time_format'), $cached_stats['timestamp'] ) );
+			} else {
+				echo __( 'No cached data available.', 'network-admin-assistant' );
+			}
+			echo '<br />';
+			echo '<a href="' . network_admin_url( 'admin.php?page=naa-plugin-stats' ) . '">' . __( 'Visit the Plugin Stats page to update these statistics.', 'network-admin-assistant' ) . '</a>';
+			echo '</p>';
+			// Wrap up.
 			echo '</section>';
 		}
 
