@@ -3,7 +3,7 @@ Contributors: roytanck
 Tags: multisite, network, plugins, widgets, users, statistics, roles
 Requires at least: 5.0
 Tested up to: 5.4.2
-Stable tag: 1.2
+Stable tag: 1.2.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -42,6 +42,9 @@ The plugin also adds a 'view' to the Users screen, that filters the list to show
 On the front-end, no. On large networks, the admin page will likely be slow, especially on larger networks. Currently the plugin scans a maximum of 9999 sites.
 
 == Changelog ==
+
+= 1.2.1 (2020-07-21) =
+* Improvements to the admin screens HTML markup.
 
 = 1.2 (2020-07-21) =
 * Smarter caching by only refreshing when data has expired or when a user requests fresh stats.
