@@ -67,8 +67,6 @@ if( !class_exists('NAA_Theme_Stats') ){
 			$installed_themes = wp_get_themes();
 			$dashboard_stats['installed'] = count( $installed_themes );
 
-			//var_dump( $installed_themes );
-
 			// Get all currently published sites.
 			$args = array(
 				'archived'   => 0,

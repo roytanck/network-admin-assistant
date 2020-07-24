@@ -104,8 +104,8 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 			if( is_object( $row ) ){
 				$value = maybe_unserialize( $row->option_value );
 			}
-			// Return the value as an array for compatibility with get_blog_option.
-			return (array) $value;
+			// Return the value.
+			return $value;
 		}
 
 	}
