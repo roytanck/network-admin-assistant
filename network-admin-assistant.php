@@ -82,6 +82,32 @@ if( ! class_exists('Network_Admin_Assistant') && is_multisite() ){
 			}
 		}
 
+
+		/**
+		 * Drop-in replacement function for get_blog_option that does not use switch_to_blog().
+		 *
+		 * This does not switch the blog context and does not run any hooks, so it should be faster.
+		 */
+		public static function naa_get_blog_option( $blog_id, $key, $default_value = null ){
+			global $wpdb;
+			// If $blog_id is 1, don't add the id to the table name
+			if( (int) $blog_id === 1 ){
+				$table = $wpdb->base_prefix . 'options';
+			} else {
+				$table = $wpdb->base_prefix . $blog_id . '_options';
+			}
+			// Set the default value, we'll override it later if we get a valid result.
+			$value = $default_value;
+			// Use wpdb to get the row from the table.
+			$row = $wpdb->get_row( $wpdb->prepare( "SELECT option_value FROM $table WHERE option_name = %s LIMIT 1", $key ) );
+			// Check if the result is valid and set value if so.
+			if( is_object( $row ) ){
+				$value = maybe_unserialize( $row->option_value );
+			}
+			// Return the value as an array for compatibility with get_blog_option.
+			return (array) $value;
+		}
+
 	}
 
 	// Create an instance of the class.

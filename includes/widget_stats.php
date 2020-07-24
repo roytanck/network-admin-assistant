@@ -71,7 +71,7 @@ if( !class_exists('NAA_Widget_Stats') ){
 			// Gather the data by looping through the sites and getting the sidebars_widgets option.
 			foreach( $sites as $site ){
 				
-				$sidebars = get_blog_option( $site->blog_id, 'sidebars_widgets', null );
+				$sidebars = Network_Admin_Assistant::naa_get_blog_option( $site->blog_id, 'sidebars_widgets', null );
 				
 				foreach( $sidebars as $sidebarname=>$widgets ){
 					if( !empty( $widgets ) && $this->is_valid_sidebar( $sidebarname ) ){

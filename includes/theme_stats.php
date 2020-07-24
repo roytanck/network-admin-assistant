@@ -82,7 +82,7 @@ if( !class_exists('NAA_Theme_Stats') ){
 			// Gather the data by looping through the sites and getting the stylesheet option.
 			foreach( $sites as $site ){
 
-				$theme = get_blog_option( $site->blog_id, 'stylesheet', null );
+				$theme = Network_Admin_Assistant::naa_get_blog_option( $site->blog_id, 'stylesheet', null );
 
 				// Check if this is a theme we've not enountered before.
 				if( ! array_key_exists( $theme, $active_themes ) ){

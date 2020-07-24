@@ -91,8 +91,8 @@ if( !class_exists('NAA_Plugin_Stats') ){
 			// Gather the data by looping through the sites and getting the active_plugins option.
 			foreach( $sites as $site ){
 
-				$plugins = get_blog_option( $site->blog_id, 'active_plugins', null );
-			
+				$plugins = Network_Admin_Assistant::naa_get_blog_option( $site->blog_id, 'active_plugins', null );
+
 				foreach( $plugins as $plugin ){
 					if( !empty( $plugin ) ){
 						// Exclude the plugin if it is (also) network-activated.
